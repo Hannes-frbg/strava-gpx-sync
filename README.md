@@ -2,11 +2,12 @@
 
 [![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![Model Context Protocol](https://img.shields.io/badge/MCP-FastMCP_v1.2-58A6FF?logo=anthropic&logoColor=white)](https://modelcontextprotocol.io/)
+[![CI Tests](https://github.com/Hannes-frbg/strava-gpx-sync/actions/workflows/tests.yml/badge.svg)](https://github.com/Hannes-frbg/strava-gpx-sync/actions)
 [![Strava](https://img.shields.io/badge/Strava-Sync_%26_Analytics-FC4C02?logo=strava&logoColor=white)](https://www.strava.com/)
 [![Playwright](https://img.shields.io/badge/Playwright-Anti--Bot_Auth-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Verbinde Strava direkt mit **Claude Desktop**, **Cursor** oder jedem anderen **MCP-Client** und mach deine KI zu deinem persönlichen Radsport-Coach!
+Verbinde Strava direkt mit **Claude Desktop**, **Cursor**, der **Claude Mobile App** oder jedem anderen **MCP-Client** und mach deine KI zu deinem persönlichen Radsport-Coach!
 
 **Strava GPX Sync** ist ein leichtgewichtiger, lokaler **Model Context Protocol (MCP) Server**. Er lädt deine Fahrten automatisch via Browser-Automatisierung von Strava herunter, berechnet echte Leistungsmetriken (Virtual Power, VAM, TRIMP, Kohlenhydrat- und Flüssigkeitsverbrauch) und stellt sie deiner KI per MCP-Tools zur Verfügung.
 
@@ -57,8 +58,10 @@ Einfach, schnell und ohne unnötigen Ballast:
 ```mermaid
 flowchart LR
     Strava["🌐 Strava.com<br/>(Aktivitäten & GPX)"] -->|Playwright Sync| Core["🚴 Strava GPX Sync Engine<br/>• GPX-Parser & Telemetrie<br/>• Leistungs- & Ernährungsdiagnostik<br/>• Lokale Vektor-Suche"]
+    Health["🍏 Eigene Apple Health App<br/>(Lokaler REST-Server)"] -.->|Optional| Core
     Core --> FastMCP["⚡ FastMCP Server<br/>(mcp_server.py)"]
     FastMCP <-->|stdio / JSON-RPC| Claude["🧠 Claude Desktop / Cursor<br/>(Dein KI-Cycling-Coach)"]
+    FastMCP <-.->|SSE via Cloudflare Tunnel| Mobile["📱 Claude Mobile & Web<br/>(Eigene Public Domain)"]
 ```
 
 - **Keine externen Cloud-Modelle nötig:** Der MCP-Server läuft lokal und spricht direkt mit deinem lokalen Claude Desktop oder Cursor.
@@ -116,6 +119,37 @@ Füge unter `mcpServers` folgendes hinzu (Pfade zu deinem Python und Skript anpa
 ```
 
 Starte Claude Desktop neu: Fertig! Du hast ab sofort Zugriff auf alle Strava-Tools.
+
+---
+
+## 🍏 Apple Health Integration: Offene Schnittstelle für eigene iOS-Apps
+
+Der MCP-Server bringt mit `apple_health_service.py` bereits eine vorbereitete, passive Schnittstelle für Gesundheits- und Erholungsdaten mit (Ruhepuls, Schlafphasen, HRV, Readiness-Score):
+
+- **Wie es funktioniert:** Der Server führt im Hintergrund extrem ressourcenschonende Mikro-Pings (<0.35s Timeout) im lokalen Netzwerk aus. Sobald auf einem iPhone im gleichen WLAN ein lokaler Health-REST-Dienst auf Port 8080 aktiv ist, werden die Vitaldaten in 1 bis 5 Sekunden automatisch synchronisiert.
+- **Eigene Apps & Kurzbefehle:** Die Schnittstelle ist komplett offen. Jeder kann eine eigene kleine iOS-App oder einen Apple Shortcut bauen, der einfache Endpunkte wie `/api/vitals`, `/api/sleep` oder `/api/export` bereitstellt.
+- **Ausblick:** In Zukunft ist ein eigenes GitHub-Repository mit einer fertigen, nativen iOS-Begleit-App in Planung, die man sich einfach aufs iPhone lädt und die den Datenabgleich auf Knopfdruck startet.
+
+---
+
+## 🌐 Unterwegs & Mobile nutzen: Public Domain via Cloudflare Tunnel
+
+Lokal läuft der Server standardmäßig über stdio oder localhost. Wer den KI-Coach aber auch unterwegs in der **Claude Mobile App auf dem Smartphone** oder auf **claude.ai im Browser** nutzen möchte, kann den MCP-Server über einen kostenlosen **Cloudflare Zero Trust Tunnel** mit einer eigenen Public Domain verbinden:
+
+1. **Tunnel starten:**
+   ```bash
+   cloudflared tunnel --url http://localhost:8000
+   ```
+   *(Oder über einen festen Cloudflare Tunnel auf deine eigene Subdomain wie `mcp.deine-domain.de`)*
+
+2. **Absicherung:**
+   Setze in deiner `.env`-Datei einen sicheren Token:
+   ```env
+   MCP_AUTH_TOKEN=dein_geheimes_passwort_token
+   ```
+
+3. **In Claude.ai eintragen:**
+   Füge die URL `https://mcp.deine-domain.de/sse` mit dem Header `Authorization: Bearer <TOKEN>` in Claude.ai unter benutzerdefinierten Konnektoren ein. Schon hast du deinen Strava-Coach immer in der Hosentasche dabei!
 
 ---
 
