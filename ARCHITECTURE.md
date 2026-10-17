@@ -1,6 +1,6 @@
 # System Architecture & Technical Specification
 
-> **Strava GPX Sync — Headless MCP Integration & Performance Pipeline**  
+> **Strava GPX Sync: Headless MCP Integration & Performance Pipeline**  
 > *Spezifikation der Systemarchitektur, Datenströme, Thread-Isolation und Caching-Strategien.*
 
 ---
@@ -36,7 +36,7 @@ flowchart TB
         
         subgraph LOCAL_CACHE["Storage & Caching Layer"]
             CACHE["📁 ./downloads/<br/><i>(Local GPX Storage)</i>"]
-            AUTH["🔑 auth.json<br/><i>(Encrypted Session & Cookies)</i>"]
+            AUTH["🔑 auth.json<br/><i>(Plaintext Session Cookies, .gitignore)</i>"]
             RAG_DB["🗄️ SQLite Vector Store<br/><code>strava_rag.db</code> (FastEmbed 384-dim)"]
         end
 
@@ -106,7 +106,7 @@ sequenceDiagram
     SSE->>Cache: Prüfe lokale GPX-Datei
     Cache-->>SSE: Datei vorhanden (Hit)
     Note over SSE: Lokale Metrikenberechnung (TRIMP, HR-Zonen, Höhenmeter)
-    SSE-->>Client: 200 OK — JSON Metriken (Latenz: ~50ms)
+    SSE-->>Client: 200 OK - JSON Metriken (Latenz: ~50ms)
     end
 
     %% Scenario 2: Live Browser Extraction
@@ -119,7 +119,7 @@ sequenceDiagram
     Strava-->>BM: DOM + window.pageView._segmentEfforts
     Note over BM: Extrahiere Segmente, PRs, Watt, VAM, HR -> page.close()
     BM-->>SSE: Strukturierte Segment-Liste
-    SSE-->>Client: 200 OK — JSON Segmente & PRs (Latenz: ~2.5s)
+    SSE-->>Client: 200 OK - JSON Segmente & PRs (Latenz: ~2.5s)
     end
 ```
 

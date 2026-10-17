@@ -4,107 +4,71 @@
 [![Model Context Protocol](https://img.shields.io/badge/MCP-FastMCP_v1.2-58A6FF?logo=anthropic&logoColor=white)](https://modelcontextprotocol.io/)
 [![Strava](https://img.shields.io/badge/Strava-Sync_%26_Analytics-FC4C02?logo=strava&logoColor=white)](https://www.strava.com/)
 [![Playwright](https://img.shields.io/badge/Playwright-Anti--Bot_Auth-2EAD33?logo=playwright&logoColor=white)](https://playwright.dev/)
-[![FastEmbed RAG](https://img.shields.io/badge/RAG-Local_Vector_Store-8E75B2)](https://github.com/qdrant/fastembed)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-Verwandle **Claude Desktop**, **Cursor** oder jeden **MCP-fähigen KI-Client** in deinen persönlichen, datenschutzfreundlichen **KI-Radsport-Trainer**! 
+Verbinde Strava direkt mit **Claude Desktop**, **Cursor** oder jedem anderen **MCP-Client** und mach deine KI zu deinem persönlichen Radsport-Coach!
 
-**Strava GPX Sync** synchronisiert deine Aktivitäten vollautomatisch von Strava, berechnet wissenschaftliche Leistungsmetriken (Virtual Power, VAM, TRIMP, aerobe Entkopplung, Kohlenhydrat- & Flüssigkeitsbedarf) und stellt deiner KI über das offizielle **Model Context Protocol (MCP)** alle Daten in Echtzeit zur Verfügung.
+**Strava GPX Sync** ist ein leichtgewichtiger, lokaler **Model Context Protocol (MCP) Server**. Er lädt deine Fahrten automatisch via Browser-Automatisierung von Strava herunter, berechnet echte Leistungsmetriken (Virtual Power, VAM, TRIMP, Kohlenhydrat- und Flüssigkeitsverbrauch) und stellt sie deiner KI per MCP-Tools zur Verfügung.
 
-> 🔒 **100 % Lokal & Privat:** Alle GPX-Dateien, Vektordatenbanken und Berechnungen verbleiben vollständig auf deinem Rechner. Keine Weitergabe an Cloud-Server oder Drittanbieter.
+Kein teurer Strava-Entwickler-Account, kein App-Review, keine Cloud-Abhängigkeit: Alles läuft direkt auf deinem eigenen Rechner.
 
 ---
 
-## 🗺️ Interaktive Demo (100 km Gravel-Tour)
+## 🗺️ Live-Demo: 100 km Gravel-Tour
 
-Im Ordner [`demo/`](demo/) findest du eine aufbereitete 100-km-Gravel-Ausfahrt mit vollständigen Telemetrie- und Leistungsdaten:
-- 📄 **GPX-Datei:** [`demo/demo_100km_ride.gpx`](demo/demo_100km_ride.gpx) (102.8 km, 421 hm)
-- 🗺️ **Interaktive Karte:** Öffne [`demo/demo_100km_map.html`](demo/demo_100km_map.html) direkt in deinem Browser für eine interaktive Leaflet-Kartenvisualisierung mit Dark-Mode und Live-Statistiken!
+Im Ordner [`demo/`](demo/) liegt eine echte 100-km-Gravel-Tour zum Ausprobieren:
+- **GPX-Datei:** [`demo/demo_100km_ride.gpx`](demo/demo_100km_ride.gpx) (102 km, 415 hm)
+- **Interaktive Karte:** Öffne [`demo/demo_100km_map.html`](demo/demo_100km_map.html) einfach mit einem Doppelklick in deinem Browser. Du siehst sofort die GPS-Strecke auf einer interaktiven Karte mit Höhenprofil, Leistungs- und Ernährungsdaten!
 
-```
+```text
 ==============================================================================
   AKTIVITÄTS-ANALYSE: Meine ersten 100km (Demo)
-  Strecke: 101.96 km | Höhenmeter: +414.9 hm | Netto-Fahrzeit: 04:54:11
+  Strecke: 101.96 km | Höhenmeter: +415 hm | Netto-Fahrzeit: 04:54:11
 ==============================================================================
-  • Ø Geschwindigkeit: 20.80 km/h (Max: 41.17 km/h)
+  • Ø Geschwindigkeit: 20.8 km/h (Max: 41.2 km/h)
   • Virtual Power: 67.3 W Ø (170.8 W am Berg / 2.85 W/kg)
-  • Kletterleistung (VAM): 650 m/h (U17 Solides Grundlagenausdauer-Klettern)
-  • Energieverbrauch: 1,315 kcal (160.4 g Kohlenhydrate verbrannt)
-  • Schweißverlust & Hydration: 3.63 Liter (ca. 0.74 L/h)
+  • Kletterleistung (VAM): 650 m/h (Solides Grundlagenausdauer-Klettern)
+  • Energieverbrauch: 1,315 kcal (160 g Kohlenhydrate verbrannt)
+  • Schweißverlust: ca. 3.6 Liter (ca. 0.74 L/h)
 ==============================================================================
 ```
 
 ---
 
-## ✨ Features & Highlights
+## ⚡ Was kann der MCP-Server?
 
-### 🤖 1. KI-Cycling-Coach via MCP
-- Sprich in **Claude Desktop** oder **Cursor** ganz natürlich mit deiner KI:
-  - *„Claude, analysiere meine gestrige Ausfahrt. War meine Pacing-Strategie an den Anstiegen optimal?“*
-  - *„Wie steht es um mein Training Load (CTL/ATL/TSB) diese Woche? Sollte ich morgen Intervalle fahren oder Pause machen?“*
-  - *„Berechne mir basierend auf der 100km-Route den genauen Kohlenhydratbedarf pro Stunde.“*
+Wenn der Server läuft, kannst du in Claude Desktop einfach ganz normal Fragen stellen:
 
-### ⚡ 2. Robuster Playwright Strava-Sync
-- Überwindet Cloudflare- und Bot-Protection durch persistente Browser-Sessions (`auth.json`).
-- Unterstützt manuelle Google OAuth / 2FA Authentifizierung mit einem einzigen Befehl (`python setup_auth.py`).
+> **Du:** *"Claude, schau dir meine letzte Ausfahrt an. Wie war mein Pacing am Berg?"*  
+> **Claude:** Ruft das Tool `download_and_analyze_activity` auf, liest die Steigungssegmente aus und erklärt dir genau, bei welchem Kilometer du überpaced hast.
 
-### 🧬 3. Sportwissenschaftliche Leistungsdiagnostik
-- **Leistung & Watt:** Virtual Power Schätzung basierend auf GPS, Gefälle, Rollwiderstand (OSM-Wegeoberflächen) und Systemgewicht.
-- **Kletterleistung:** Steigrate (VAM in m/h) und W/kg-Klassifikation nach Ausbildungsrichtlinien.
-- **Aerobe Entkopplung (Cardiac Drift):** Vergleicht die Effizienz-Ratio der ersten und zweiten Fahrthälfte zur Erkennung von Ermüdung.
-- **Ernährungs- & Stoffwechselberechnung:** Berechnet Fett- und Kohlenhydrat-Oxidationsraten nach Jeukendrup & Romijn, ermittelt das Hungerast-Risiko und empfiehlt die stündliche Zufuhr (g/h).
+> **Du:** *"Wie steht es aktuell um meine Fitness und Ermüdung?"*  
+> **Claude:** Ruft `get_training_status` auf und berechnet dir deine CTL (Fitness), ATL (Ermüdung) und TSB (Form) nach dem Banister-Modell.
 
-### 🔍 4. Lokale RAG-Engine (FastEmbed + SQLite)
-- Durchsucht deine gesamte Fahrthistorie semantisch in Sekunden (*„Finde alle Fahrten mit mehr als 80 km und über 25 km/h Schnitt“*).
-
-### 🍏 5. Optionale Apple Health & Wetter-Integration
-- Liest auf Wunsch Ruhepuls, Schlafqualität und HRV (Herzfrequenzvariabilität) für ganzheitliche Erholungs-Scores ein.
-- Berechnet segmentgenaue Gegenwind- und Rückenwind-Effekte über OpenWeatherMap.
+> **Du:** *"Ich fahre morgen eine harte 90-km-Runde. Wie viele Kohlenhydrate muss ich einpacken?"*  
+> **Claude:** Berechnet mit `calculate_live_bonk_and_fueling_horizon` deinen voraussichtlichen Verbrauch und gibt dir eine Empfehlung für Riegel und Isodrinks.
 
 ---
 
-## 🏗️ System-Architektur
+## 🏗️ Reine, lokale MCP-Architektur
+
+Einfach, schnell und ohne unnötigen Ballast:
 
 ```mermaid
-flowchart TD
-    subgraph Client ["🧠 KI-Assistent & User Interface"]
-        CD["Claude Desktop / Cursor<br/>(MCP Client)"]
-        WEB["Lokales Dashboard<br/>(Port 8000)"]
-    end
-
-    subgraph MCP ["⚙️ FastMCP Server (mcp_server.py)"]
-        direction TB
-        TOOLS["🛠️ 25+ MCP Tools<br/>• get_training_status<br/>• download_and_analyze<br/>• calculate_bonk_horizon<br/>• search_activities_rag"]
-        SSE["Starlette ASGI App<br/>(stdio & SSE Transport)"]
-    end
-
-    subgraph Data ["💾 Lokale Daten & Engine"]
-        RAG["FastEmbed Vector DB<br/>(strava_rag.db)"]
-        GPX["GPX Parser & Sports Science<br/>(analyze_gpx.py)"]
-        SYNC["Playwright Sync Engine<br/>(sync_gpx.py)"]
-    end
-
-    subgraph External ["🌐 Externe APIs & Dienste"]
-        STRAVA["Strava Web API & GPX"]
-        WEATHER["OpenWeatherMap API"]
-        HEALTH["Apple Health Auto-Export"]
-    end
-
-    CD <-->|stdio JSON-RPC| TOOLS
-    WEB <-->|HTTP / REST| SSE
-    TOOLS --> GPX
-    TOOLS --> RAG
-    TOOLS --> SYNC
-    SYNC -->|Session Auth| STRAVA
-    TOOLS -.->|Optional| WEATHER
-    TOOLS -.->|Optional| HEALTH
+flowchart LR
+    Strava["🌐 Strava.com<br/>(Aktivitäten & GPX)"] -->|Playwright Sync| Core["🚴 Strava GPX Sync Engine<br/>• GPX-Parser & Telemetrie<br/>• Leistungs- & Ernährungsdiagnostik<br/>• Lokale Vektor-Suche"]
+    Core --> FastMCP["⚡ FastMCP Server<br/>(mcp_server.py)"]
+    FastMCP <-->|stdio / JSON-RPC| Claude["🧠 Claude Desktop / Cursor<br/>(Dein KI-Cycling-Coach)"]
 ```
+
+- **Keine externen Cloud-Modelle nötig:** Der MCP-Server läuft lokal und spricht direkt mit deinem lokalen Claude Desktop oder Cursor.
+- **Wissenschaftliche Formeln:** Virtual Power nach Fahrergewicht und Steigung, VAM-Kletterrate, Herzfrequenz-Zonen und Glykogenspeicher-Prognose (nach Jeukendrup & Romijn).
 
 ---
 
-## 🚀 Schnelleinstieg
+## 🚀 In 3 Schritten startklar
 
-### 1. Repository klonen & Abhängigkeiten installieren
+### 1. Repository klonen & vorbereiten
 
 ```bash
 git clone https://github.com/Hannes-frbg/strava-gpx-sync.git
@@ -112,9 +76,10 @@ cd strava-gpx-sync
 
 # Virtuelle Umgebung erstellen
 python -m venv .venv
-# Unter Windows:
-.venv\Scripts\activate
-# Unter Linux/macOS:
+
+# Aktivieren (Windows PowerShell):
+.\.venv\Scripts\Activate.ps1
+# Aktivieren (Linux/macOS):
 # source .venv/bin/activate
 
 # Abhängigkeiten installieren
@@ -122,76 +87,75 @@ pip install -r requirements.txt
 playwright install chromium
 ```
 
-### 2. Einmalige Strava-Authentifizierung
+### 2. Strava-Login (Einmalig)
 
-Starte den Browser-Login:
 ```bash
 python setup_auth.py
 ```
-Ein Chrome-Fenster öffnet sich. Logge dich ganz normal bei Strava ein (auch mit Google oder 2FA möglich). Sobald du dein Strava-Dashboard siehst, speichert das Skript die Session sicher in `auth.json` ab und schließt das Fenster.
+Ein Chrome-Fenster öffnet sich. Logge dich ganz normal bei Strava ein (auch "Mit Google anmelden" oder 2FA funktioniert problemlos). Sobald du dein Strava-Dashboard siehst, speichert das Tool deine Session und schließt sich wieder.
 
-### 3. MCP Server in Claude Desktop einbinden
+### 3. In Claude Desktop eintragen
 
-Öffne deine Claude Desktop Konfigurationsdatei:
+Öffne deine Claude Desktop Konfiguration:
 - **Windows:** `%APPDATA%\Claude\claude_desktop_config.json`
 - **macOS:** `~/Library/Application Support/Claude/claude_desktop_config.json`
 
-Füge folgenden Eintrag unter `mcpServers` hinzu (Pfade anpassen):
+Füge unter `mcpServers` folgendes hinzu (Pfade zu deinem Python und Skript anpassen):
 
 ```json
 {
   "mcpServers": {
     "strava-coach": {
-      "command": "C:\\Users\\DEIN_BENUTZERNAME\\...\\strava-gpx-sync\\.venv\\Scripts\\python.exe",
+      "command": "C:\\Pfad\\zu\\strava-gpx-sync\\.venv\\Scripts\\python.exe",
       "args": [
-        "C:\\Users\\DEIN_BENUTZERNAME\\...\\strava-gpx-sync\\mcp_server.py"
+        "C:\\Pfad\\zu\\strava-gpx-sync\\mcp_server.py"
       ]
     }
   }
 }
 ```
 
-Starte Claude Desktop neu. Du siehst nun das 🔨-Symbol mit allen Strava-Tools!
+Starte Claude Desktop neu: Fertig! Du hast ab sofort Zugriff auf alle Strava-Tools.
 
 ---
 
-## 🛠️ Ausgewählte MCP-Werkzeuge
+## 🔒 Wichtiger Hinweis zu Sicherheit & Cookies
 
-| Tool | Beschreibung |
+Damit der automatische GPX-Download ohne offiziellen Strava API-Key funktioniert, nutzt das Tool Browser-Automatisierung mit Playwright:
+
+- Nach dem Login über `setup_auth.py` werden deine Session-Cookies in der lokalen Datei **`auth.json`** gespeichert.
+- **Wichtig:** Diese Cookies stehen im Klartext in dieser JSON-Datei auf deiner Festplatte.
+- **Schutz:** Die Datei `auth.json` und der Ordner `downloads/` sind fest in der [`.gitignore`](.gitignore) eingetragen. Sie werden **niemals** auf GitHub hochgeladen und verlassen deinen Computer zu keinem Zeitpunkt.
+- Gib die Datei `auth.json` niemals an Dritte weiter, da sie deine Strava-Sitzung enthält.
+
+---
+
+## 🛠️ Wichtigste MCP-Tools im Überblick
+
+| Tool | Was es macht |
 | :--- | :--- |
-| `list_strava_activities` | Ruft deine neuesten Aktivitäten direkt live von Strava ab |
-| `download_and_analyze_activity` | Lädt eine Aktivität herunter und führt eine vollständige sportwissenschaftliche Auswertung durch |
-| `analyze_local_gpx` | Analysiert beliebige lokale GPX-Dateien |
-| `get_training_status` | Berechnet CTL (Fitness), ATL (Fatigue) und TSB (Form) nach dem Banister-Impulse-Response-Modell |
-| `calculate_live_bonk_and_fueling_horizon` | Prognostiziert Glykogenspeicher und warnt vor dem Hungerast |
-| `calculate_activity_decoupling` | Berechnet die aerobe Entkopplung (Pwr:HR Ratio Drift) |
-| `search_activities_rag` | Durchsucht deine Fahrthistorie mit natürlicher Sprache (semantische Vektorsuche) |
-| `get_council_coaching_verdict` | Multi-Agenten Feedback von Virtuellen Trainern für gezielte Renntaktik |
+| `list_strava_activities` | Zeigt deine neuesten Strava-Aktivitäten mit Distanz, Zeit und Typ an |
+| `download_and_analyze_activity` | Lädt eine Fahrt herunter und berechnet Watt, VAM, Kletterleistung und Ernährung |
+| `analyze_local_gpx` | Wertet eine beliebige lokale GPX-Datei aus (z.B. aus dem `demo/`-Ordner) |
+| `get_training_status` | Ermittelt deinen aktuellen Form- und Ermüdungszustand (CTL, ATL, TSB) |
+| `calculate_live_bonk_and_fueling_horizon` | Warnt vor dem gefürchteten Hungerast und berechnet Kohlenhydratmengen |
+| `calculate_activity_decoupling` | Erkennt kardiale Drift (Entkopplung von Puls und Watt bei Ermüdung) |
+| `search_activities_rag` | Durchsucht deine vergangenen Fahrten mit normaler Sprache per Vektorsuche |
 
 ---
 
-## 🧪 Tests ausführen
+## 🧪 Tests
 
-Das Projekt verfügt über eine umfassende Test-Suite (81 Unit- und Integrationstests):
+Das Projekt enthält eine vollständige Test-Suite mit 81 automatisierten Tests:
 
 ```bash
 python -m unittest test_mcp_server.py
 ```
-
-Ergebnis: `Ran 81 tests ... OK`
-
----
-
-## 🛡️ Datenschutz & Sicherheit
-
-- **Keine Passwörter im Klartext:** Zugangsdaten werden niemals im Quellcode gespeichert.
-- **Private Routen geschützt:** Der Ordner `downloads/` ist standardmäßig in `.gitignore` eingetragen, damit deine privaten Trainingsrunden und Start-/Zielorte niemals versehentlich auf GitHub landen.
-- **Demodaten anonymisiert:** Die Demo-GPX-Datei wurde mit einer Sicherheits-Schutzzone versehen.
+*(Alle 81 Tests laufen lokal durch: `Ran 81 tests ... OK`)*
 
 ---
 
-## 📄 Lizenz & Danksagung
+## 📄 Lizenz
 
-Dieses Projekt ist unter der **MIT-Lizenz** lizenziert – frei zur Nutzung, Weiterentwicklung und Anpassung für deine eigenen Radsport-Projekte!
-
-*Erstellt von [Hannes-frbg](https://github.com/Hannes-frbg) — Feedback, PRs und Sterne auf GitHub sind herzlich willkommen!*
+Open Source unter der [MIT-Lizenz](LICENSE).  
+Gebaut von [Hannes-frbg](https://github.com/Hannes-frbg). Feedback, Ideen und Pull Requests sind jederzeit willkommen!
