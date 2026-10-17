@@ -1,0 +1,48 @@
+# ==============================================================================
+# STRAVA GPX SYNC & MCP SERVER — GITIGNORE
+# ==============================================================================
+
+# Python Runtime & Cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual Environments
+.venv/
+env/
+venv/
+ENV/
+
+# Authentication & Sensitive Browser Data (Playwright Session Cookies)
+auth.json
+auth_*.json
+browser_profile/*
+!browser_profile/.gitkeep
+
+# Personal Activity Files (Never leak private routes / home address!)
+downloads/*
+!downloads/.gitkeep
+
+# Vector Databases & SQLite Stores
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment Variables & API Secrets
+.env
+*.env
+.env.*
+!.env.example
+
+# IDEs & Editor Swaps
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+*.log
+logs/

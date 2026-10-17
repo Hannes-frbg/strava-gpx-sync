@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+    "strava-coach-stdio": {
+      "command": "python",
+      "args": [
+        "mcp_server.py"
+      ]
+    },
+    "strava-coach-sse": {
+      "url": "http://localhost:8000/sse",
+      "headers": {
+        "Authorization": "Bearer YOUR_MCP_AUTH_TOKEN_HERE"
+      }
+    }
+  }
+}
